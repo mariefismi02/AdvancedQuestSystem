@@ -30,4 +30,4 @@ MonoBehaviour:
       data:
         ItemId: Coin
         CurrentCount: 0
-        TargetCount: 100
+        TargetCount: 10

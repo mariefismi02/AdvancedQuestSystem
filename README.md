@@ -168,3 +168,8 @@ This workflow ensures editor-driven asset generation and correct wiring between 
 - `Runtime/IQuestSaveable.cs` — save/load interface.
 - `Editor/QuestAssetScriptGenerator.cs` — editor helpers.
 - `Samples~/PlayerQuest` — example content (import via Package Manager Samples).
+
+## Future plan
+- Auto Complete option in quest asset.
+- Unlock requirement (optional) in quest asset.
+- Separated assembly (or package if needed) for a modular and more customizable save system — allows implementing custom save backends (for example using a 3rd-party cloud service instead of local save).

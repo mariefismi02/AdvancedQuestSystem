@@ -1,0 +1,16 @@
+{
+    "name": "mariefismi02.quest_system.Asset",
+    "rootNamespace": "",
+    "references": [
+        "GUID:9627b7c6f3539304bb90d9b0313a1ebf"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

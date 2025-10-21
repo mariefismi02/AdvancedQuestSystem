@@ -122,6 +122,8 @@ namespace mariefismi02.Quest.Editor
             // template pakai SerializeReference, bukan Asset
             string template =
                 $@"
+using mariefismi02.Quest;
+using mariefismi02.Quest.Asset;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -202,6 +204,8 @@ public class {className} : ScriptableObject
             // --- template ---
             string template =
         $@"
+using mariefismi02.Quest;
+using mariefismi02.Quest.Asset;
 using System;
 using UnityEngine;
 

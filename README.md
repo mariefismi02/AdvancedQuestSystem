@@ -25,16 +25,126 @@ The recommended workflow to create quests and supporting scripts:
 1. Ownership type
    - Create an ownership class that represents "who owns" the quest (e.g., Player).
    - That class is used to receive rewards. Mark it with the attribute:
-     [QuestOwnership]
+     `[QuestOwnership]`
+
+    ````csharp
+    using mariefismi02.Quest;
+    using UnityEngine;
+
+    [QuestOwnership]
+    public class Player : MonoBehaviour
+    {
+        public void AddExp(int exp)
+        {
+            Debug.Log("Player received exp: " + exp);
+        }
+
+        public void AddItem(string itemId, int amount)
+        {
+            Debug.Log("Player received item: " + itemId + " x" + amount);
+        }
+    }
+    ````
 
 2. Objectives
    - Create objective scripts for your game needs by implementing the `QuestObjective` interface/class (example: `CollectItemObjective`).
-   - Mark each objective type with: [QuestComposite]
+   - Mark each objective type with: `[QuestComposite]`
+
+   ````csharp
+    using mariefismi02.Quest;
+    using UnityEngine;
+
+    [QuestComposite]
+    public class CollectItemObjective : QuestObjective
+    {
+        private string itemId;
+        private int currentCount, targetCount;
+
+        //TODO: pindahin ke scriptable object
+        public override string Description => $"Collect {targetCount} of item '{itemId}'";
+
+        public CollectItemObjective(string itemId, int targetCount)
+        {
+            this.itemId = itemId;
+            this.targetCount = targetCount;
+        }
+
+        private void OnCollectItem(string id)
+        {
+            if (id != itemId)
+            {
+                return;
+            }
+
+            if (IsCompleted)
+            {
+                return;
+            }
+
+            currentCount++;
+
+            OnProgressUpdated.Invoke(currentCount, targetCount);
+
+            if (currentCount >= targetCount)
+            {
+                IsCompleted = true;
+                OnCompleted.Invoke();
+            }
+        }
+        
+        public override void Init()
+        {
+            GameEvent.Instance.OnCollectItem.AddListener(OnCollectItem);
+        }
+
+        public override void Cleanup()
+        {
+            GameEvent.Instance.OnCollectItem.RemoveListener(OnCollectItem);
+        }
+
+        public override int GetProgressValue()
+        {
+            var progress = currentCount / (float)targetCount;
+            return Mathf.RoundToInt(progress * 100);
+        }
+
+        public override void SetProgressValue(int value)
+        {
+            currentCount = (targetCount * value) / 100;
+        }
+
+        public override (int current, int target) GetProgress()
+        {
+            return (currentCount, targetCount);
+        }
+    }
+    ````
 
 3. Rewards
    - Create reward scripts by deriving from `QuestReward<T>` where T is your ownership class (e.g., `QuestReward<Player>`).
    - Example: `ExpReward : QuestReward<Player>`
-   - Mark rewards with: [QuestReward(typeof(Player))] — ownership type is required for rewards.
+   - Mark rewards with: `[QuestReward(typeof(Player))]` — ownership type is required for rewards.
+
+   ````csharp
+    using mariefismi02.Quest;
+    using UnityEngine;
+
+    [QuestComposite(typeof(Player))]
+    public class ExpReward : IQuestReward<Player>
+    {
+        private int expAmount;
+
+        public ExpReward(int expAmount)
+        {
+            this.expAmount = expAmount;
+        }
+
+        public void Give(Player target)
+        {
+            target.AddExp(expAmount);
+        }
+    }
+    ````
 
 4. Why attributes
    - `[QuestOwnership]` and `[QuestComposite]` are required by the editor generator so it can discover types and auto-generate the Quest ScriptableObject asset script.

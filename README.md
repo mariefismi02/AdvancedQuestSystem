@@ -168,9 +168,3 @@ This workflow ensures editor-driven asset generation and correct wiring between 
 - `Runtime/IQuestSaveable.cs` — save/load interface.
 - `Editor/QuestAssetScriptGenerator.cs` — editor helpers.
 - `Samples~/PlayerQuest` — example content (import via Package Manager Samples).
-
-## Contributing
-Open issues or PRs. Follow existing code style and include examples for new features.
-
-## License
-Add a LICENSE file to specify project licensing.
